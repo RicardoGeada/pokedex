@@ -1,0 +1,162 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto',sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+}
+
+
+.pkmn-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.pkmn-list-item {
+    list-style: none;
+}
+
+.pkmn-card {
+    height: 80px;
+    width: 300px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 8px 16px;
+    position: relative;
+    /* gap: 8px; */
+}
+
+.pkmn-card-number {
+    font-weight: 700;
+}
+
+.pkmn-card-name-type-container {
+    margin-left: 8px;
+    flex: 1;
+}
+
+.pkmn-card-name {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.pkmn-type-container {
+    display: flex;
+    gap: 8px;
+}
+
+.type {
+    padding: 4px 8px;
+    border-radius: 50rem;
+    filter: brightness(1.1);
+}
+
+.pkmn-card-image {
+    position: absolute;
+    right: 16px;
+    height: 100%;
+    z-index: 1;
+}
+
+
+.svg-pokeball-white path{
+    opacity: 25%;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Pokemon Type Colors */
+
+.bug {
+    background-color: #A7B820;
+}
+
+.dark {
+    background-color: #705848;
+}
+
+.dragon {
+    background-color: #7038F8;
+}
+
+.electric {
+    background-color: #F8D030;
+}
+
+.fairy {
+    background-color: #EE99AC;
+}
+
+.fighting {
+    background-color: #BF3028;
+}
+
+.fire {
+    background-color: #F18030;
+}
+
+.flying {
+    background-color: #A990F0;
+}
+
+.ghost {
+    background-color: #705897;
+}
+
+.grass {
+    background-color: #78C850;
+}
+
+.ground {
+    background-color: #E0C068;
+}
+
+.ice {
+    background-color: #98D8D8;
+}
+
+.normal {
+    background-color: #A8A878;
+}
+
+.poison {
+    background-color: #8435B4;
+}
+
+.psychic {
+    background-color: #F85888;
+}
+
+.rock {
+    background-color: #B8A038;
+}
+
+.steel {
+    background-color: #B8B8D0;
+}
+
+.water {
+    background-color: #6990F0;
+}
