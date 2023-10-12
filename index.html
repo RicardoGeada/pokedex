@@ -11,25 +11,239 @@
 <body onload="init()">
     <h1>Pokédex</h1>
     <ul id="pkmn-list" class="pkmn-list">
-        <!-- <li class="pkmn-list-item">
-            <div class="pkmn-card grass">
-                <div class="pkmn-card-number">#001</div>
-                <div class="">
-                    <div class="pkmn-card-name">Bulbusaur</div>
-                    <div class="pkmn-type-container">
-                        <div class="type grass">Grass</div>
-                        <div class="type poison">Poison</div>
-                    </div>
-                </div>
-                <img class="pkmn-card-image" src="" alt="bisasam">
-                <svg class="svg-pokeball-white" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M80 37.1223C78.5213 16.3741 61.1777 0 40 0C18.8223 0 1.47873 16.3741 0 37.1223H20.884C22.2768 27.8389 30.3049 20.7194 40 20.7194C49.6951 20.7194 57.7232 27.8389 59.116 37.1223H80Z" fill="white"/>
-                    <path d="M0.0215476 43.1655H20.9294C22.4433 52.3078 30.4053 59.2806 40 59.2806C49.5947 59.2806 57.5567 52.3078 59.0706 43.1655H79.9785C78.3607 63.7771 61.0797 80 40 80C18.9203 80 1.63933 63.7771 0.0215476 43.1655Z" fill="white"/>
-                    <path d="M40 52.9496C47.1702 52.9496 52.9827 47.1519 52.9827 40C52.9827 32.8481 47.1702 27.0504 40 27.0504C32.8298 27.0504 27.0173 32.8481 27.0173 40C27.0173 47.1519 32.8298 52.9496 40 52.9496Z" fill="white"/>
-                </svg>    
-            </div>
-        </li> -->
     </ul>
-    
+     <!-- Detail View  -->
+    <div id="popup-container" class="popup-container d-none">
+        <!-- <div class="popup-detail-view grass">
+            <div class="popup-dv-header">
+                <button onclick="">
+                    <img src="./img/arrow-back.svg" alt="back-arrow">
+                </button>
+                <div class="popup-dv-number">0001</div>
+                <button onclick="">
+                    <img src="./img/heart.svg" alt="back-arrow">
+                </button>
+            </div>
+            <div class="popup-dv-top-container">
+                <div class="popup-dv-pkmn-name">Bulbasaur</div>
+                <div class="popup-dv-pkmn-types-container">
+                    <div class="type grass">Grass</div>
+                    <div class="type poison">Poison</div>
+                </div>
+                <div class="popup-dv-image-slider">
+                    <img class="popup-dv-pkmn-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="Bulbasaur_img">
+                </div> 
+            </div>
+            <div class="popup-dv-info-container">
+                <div class="popup-dv-info-nav">
+                    <a class="nav-menu-item active" href="#info-slide-1">
+                        <p>About</p>
+                    </a>
+                    <a class="nav-menu-item" href="#info-slide-2">
+                        <p>Base Stats</p>
+                    </a>
+                    <a class="nav-menu-item" href="#info-slide-3">
+                        <p>Evolution</p>
+                    </a>
+                    <a class="nav-menu-item" href="#info-slide-4">
+                        <p>Moves</p>
+                    </a>
+                </div>
+                <div class="popup-dv-info-slider">
+                    <div id="info-slide-1" class="popup-dv-info-slide">
+                        <table>
+                            <tbody>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Species</td>
+                                    <td class="info">Seed</td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Height</td>
+                                    <td class="info">2'3.6"</td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Weight</td>
+                                    <td class="info">15.2lbs</td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Abilities</td>
+                                    <td class="info">Overgrow, Chlorophyl</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
+                                <caption>Breeding</caption>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Gender</td>
+                                    <td class="info">Male 87.5%  Female 12.5%</td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Egg Groups</td>
+                                    <td class="info">Monster</td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Egg Cycle</td>
+                                    <td class="info">Grass</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="info-slide-2" class="popup-dv-info-slide">
+                        <table>
+                            <tbody>
+                                <tr class="info-slide-tr">
+                                    <td class="category">HP</td>
+                                    <td class="info">45</td>
+                                    <td class="bar">
+                                        <div class="bar-border">
+                                            <div class="bar-fill"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Attack</td>
+                                    <td class="info">60</td>
+                                    <td class="bar">
+                                        <div class="bar-border">
+                                            <div class="bar-fill"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Defense</td>
+                                    <td class="info">48</td>
+                                    <td class="bar">
+                                        <div class="bar-border">
+                                            <div class="bar-fill"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Sp. Atk</td>
+                                    <td class="info">65</td>
+                                    <td class="bar">
+                                        <div class="bar-border">
+                                            <div class="bar-fill"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Sp. Def</td>
+                                    <td class="info">65</td>
+                                    <td class="bar">
+                                        <div class="bar-border">
+                                            <div class="bar-fill"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Speed</td>
+                                    <td class="info">45</td>
+                                    <td class="bar">
+                                        <div class="bar-border">
+                                            <div class="bar-fill"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="category">Total</td>
+                                    <td class="info">317</td>
+                                    <td class="bar">
+                                        <div class="bar-border">
+                                            <div class="bar-fill"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="info-slide-3" class="popup-dv-info-slide">
+                        <table>
+                            <tbody>
+                                <tr class="info-slide-tr">
+                                    <td class="evolution-base">
+                                        <img class="evolution-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png" alt="Bulbasaur_img">
+                                    </td>
+                                    <td class="evolution-trigger">
+                                        Level Up <br>
+                                        Lvl 18
+                                    </td>
+                                    <td class="evolves-to">
+                                        <img class="evolution-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png" alt="Ivysaur_img">
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="evolution-base">
+                                        <img class="evolution-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png" alt="Ivysaur_img">
+                                    </td>
+                                    <td class="evolution-trigger">
+                                        Level Up <br>
+                                        Lvl 36
+                                    </td>
+                                    <td class="evolves-to">
+                                        <img class="evolution-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png" alt="Venusaur_img">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="info-slide-4" class="popup-dv-info-slide">
+                        <table>
+                            <tbody>
+                                <tr class="info-slide-tr">
+                                    <td class="move-name">Tackle</td>
+                                    <td class="move-stats">
+                                        <div class="move-stats-container">
+                                            <div class="move-power">40</div>
+                                            <div class="move-accuracy">100</div>
+                                        </div>
+                                    </td>
+                                    <td class="move-type">
+                                        <div class="move-type-container">
+                                            <div class="type normal">Normal</div>
+                                            <div class="damage-category">Phys.</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="move-name">Ruckzuckhieb</td>
+                                    <td class="move-stats">
+                                        <div class="move-stats-container">
+                                            <div class="move-power">40</div>
+                                            <div class="move-accuracy">100</div>
+                                        </div>
+                                    </td>
+                                    <td class="move-type">
+                                        <div class="move-type-container">
+                                            <div class="type fighting">Fighting</div>
+                                            <div class="damage-category">Phys.</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="info-slide-tr">
+                                    <td class="move-name">Menacing Moonraze Maelstrom</td>
+                                    <td class="move-stats">
+                                        <div class="move-stats-container">
+                                            <div class="move-power">40</div>
+                                            <div class="move-accuracy">100</div>
+                                        </div>
+                                    </td>
+                                    <td class="move-type">
+                                        <div class="move-type-container">
+                                            <div class="type normal">Normal</div>
+                                            <div class="damage-category">Phys.</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div> -->
+    </div>
 </body>
 </html>
