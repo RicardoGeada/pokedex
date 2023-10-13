@@ -1,10 +1,12 @@
 const LAST_POKEMON_ID = 1017;
 const DIFFERENT_POKEMON_TYPES = 18;
+let currentIndex = 0;
 let currentPokemon;
 let currentSpecies;
 let currentEvolutionChain;
 let loadedPokemon = [];
 let allPokemon = [];
+let detailViewOpen = false;
 
 
 async function init() {
@@ -13,21 +15,24 @@ async function init() {
     //     await loadPokemon(i);
     //     addPokemon();
     // };
+    renderPokemonListItems(currentIndex,currentIndex + 30);
     // onscrollLoadMorePokemon();
-    renderallPokemonList();
 }
 
-function renderallPokemonList() {
-    for (let i =  0; i < 30; i++) {
+function renderPokemonListItems(start,end) {
+    end = end <= LAST_POKEMON_ID ? end : LAST_POKEMON_ID; // LIMIT FOR END POINT
+    for (let i = start; i < end; i++) {
         generatePokemonListItem(i);
-    }
+    };
+    currentIndex = end;
 }
 
 async function loadAllPokemon() { 
-        let url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=${LAST_POKEMON_ID}}`;
+        let url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=${LAST_POKEMON_ID}`;
         let response = await fetch(url);
         allPokemon.push(await response.json());
         allPokemon = allPokemon[0]['results'];
+        console.log(allPokemon);
         // addIdToAllPokemon
         for (let i = 0; i < allPokemon.length; i++) {
             allPokemon[i]['id'] = i + 1;
@@ -179,12 +184,13 @@ function pkmnListItemHTML(number,name,types,image,id) {
  * activate scroll eventListener to load more pokemon on scroll
  */
 function onscrollLoadMorePokemon() {
-    document.getElementById('pkmn-list').addEventListener("scroll" ,function() {
+    // document.getElementById('pkmn-list').addEventListener("scroll" ,function() {
         let pkmnList = document.getElementById('pkmn-list');
         if (pkmnList.scrollHeight - pkmnList.offsetHeight == pkmnList.scrollTop) {
-            loadNextPokemon();
+            // loadNextPokemon();
+            renderPokemonListItems(currentIndex,currentIndex + 5);
         };
-    });
+    // });
 }
 
 /**
@@ -205,7 +211,7 @@ async function openDetailView(id) {
     let popupContainer = document.getElementById('popup-container');
     popupContainer.classList.remove('d-none');
     popupContainer.innerHTML = await generateDetailViewHTML(id);
-    
+    document.documentElement.style.setProperty('--color-active-type', `var(--color-${currentPokemon['types'][0]['type']['name']})`);
 }
 
 
@@ -243,8 +249,7 @@ async function generateDetailViewHTML(id) {
     let pkmnSpDEF = pokemon['stats'][4]['base_stat'];
     let pkmnSPEED = pokemon['stats'][5]['base_stat'];
     let pkmnStatTotal = pkmnHP + pkmnATK + pkmnDEF + pkmnSpATK + pkmnSpDEF + pkmnSPEED;
-    // EVOLUTION
-    
+    // EVOLUTION 
     return /*html*/`
          <div class="popup-detail-view ${pkmnTypes[0]}">
             <div class="popup-dv-header">
@@ -280,7 +285,7 @@ async function generateDetailViewHTML(id) {
                         <p>Moves</p>
                     </a> -->
                 </div>
-                <div class="popup-dv-info-slider">
+                <div id="popup-dv-info-slider" class="popup-dv-info-slider" onscroll="checkShownInfo()">
                     <!-- ABOUT -->
                     <div id="info-slide-1" class="popup-dv-info-slide">
                         <table>
@@ -448,7 +453,8 @@ async function generateDetailViewHTML(id) {
                 </div>
             </div>
         </div>
-    `
+    `;
+    
 }
 
 
@@ -523,7 +529,7 @@ function getEggCycle() {
 
 function generateEvolutionChain() {
     let evolutionChain = ``;
-    let basePokemon = allPokemon.find( p => p['name'] == currentEvolutionChain['chain']['species']['name']);
+    let basePokemon = allPokemon.find( p => p['id'] == currentEvolutionChain['chain']['species']['url'].match(/\/(\d+)\/$/)[1]);
     let firstEvolutions = currentEvolutionChain['chain']['evolves_to'];
     // BASE TO FIRST EVOLUTION
     for (let i = 0; i < firstEvolutions.length; i++) {
@@ -846,5 +852,19 @@ function getEvolutionDetailsTurnUpsideDown(evolutionDetails) {
         `;
     } else {
         return '';
+    }
+}
+
+function checkShownInfo() {
+    let slides = document.getElementsByClassName('popup-dv-info-slide');
+    let navMenuItems = document.getElementsByClassName('nav-menu-item');
+    for (let i = 0; i < slides.length; i++) {
+        const slide = slides[i];
+        if (slide.getBoundingClientRect().left == 40) {
+            for (let j = 0; j < navMenuItems.length; j++) {
+                navMenuItems[j].classList.remove('active');
+            };
+            navMenuItems[i].classList.add('active');
+        }
     }
 }

@@ -1,3 +1,25 @@
+:root {
+    --color-bug: #A7B820;
+    --color-dark: #705848;
+    --color-dragon: #7038F8;
+    --color-electric: #F8D030;
+    --color-fairy: #EE99AC;
+    --color-fighting: #BF3028;
+    --color-fire: #F18030;
+    --color-flying: #A990F0;
+    --color-ghost: #705897;
+    --color-grass: #78C850;
+    --color-ground: #E0C068;
+    --color-ice: #98D8D8;
+    --color-normal: #A8A878;
+    --color-poison: #8435B4;
+    --color-psychic: #F85888;
+    --color-rock: #B8A038;
+    --color-steel: #B8B8D0;
+    --color-water: #6990F0;
+    --color-active-type: var(--color-bug);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -9,6 +31,27 @@ button {
     outline: none;
     border: none;
     background-color: transparent;
+    cursor: pointer;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-image: url(./img/pokeball_white.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    background-color: var(--color-active-type);
+    border: 2px solid white;
 }
 
 body {
@@ -38,10 +81,15 @@ body {
 
 .pkmn-list-item {
     list-style: none;
+    cursor: pointer;
+}
+
+.pkmn-list-item:hover {
+    transform: scale(1.05);
 }
 
 .pkmn-card {
-    height: 80px;
+    /* height: 80px; */
     width: 300px;
     border-radius: 8px;
     display: flex;
@@ -60,21 +108,25 @@ body {
 .pkmn-card-name-type-container {
     margin-left: 8px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .pkmn-card-name {
     font-weight: 700;
     font-size: 24px;
     text-transform: capitalize;
-    position: absolute;
+    /* position: absolute; */
     top: 12px;
 }
 
 .pkmn-type-container {
     display: flex;
     gap: 8px;
-    position: absolute;
-    bottom: 12px;
+    /* position: absolute; */
+    /* bottom: 12px; */
+    font-size: 12px;
 }
 
 .type {
@@ -91,7 +143,7 @@ body {
 .pkmn-card-image {
     position: absolute;
     right: 16px;
-    height: 100%;
+    height: 80px;
     z-index: 1;
 }
 
@@ -203,20 +255,32 @@ body {
     display: flex;
     justify-content: space-between;
     gap: 24px;
+    padding-bottom: 4px;
 }
 
 .nav-menu-item {
     color: rgba(0, 0, 0, 0.5);
     font-weight: 700;
-    padding-bottom: 6px;
-    border-bottom: 2px solid transparent;
-    transition: border-bottom ease-in-out 75ms;
+    padding: 8px;
+    border-radius: 10px;
+    /* padding-bottom: 6px; */
+    /* border-bottom: 2px solid transparent; */
+    /* transition: border-bottom ease-in-out 75ms; */
+    background-color: white;
+
     text-decoration: none;
     font-size: 14px;
 }
 
+.nav-menu-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 .active {
-    border-bottom: 2px solid blue;
+    /* border-bottom: 2px solid blue; */
+    /* background-color: blue; */
+    color: white;
+    background-color: var(--color-active-type);
 }
 
 .popup-dv-info-slider {
@@ -242,6 +306,7 @@ body {
     padding: 16px 0 0 0;
     flex: 1 0 100%;
     scroll-snap-align: start;
+    overflow-y: auto;
 }
 
 .popup-dv-info-slide caption {
@@ -299,7 +364,7 @@ body {
 .popup-dv-info-slide .bar-fill {
     width: 0%;
     height: 100%;
-    /* background-color: rgb(255, 136, 127); */
+    border-radius: 8px;
     transition: width ease-in-out 0.75ms;
 }
 
