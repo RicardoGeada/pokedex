@@ -6,17 +6,46 @@ let currentSpecies;
 let currentEvolutionChain;
 let loadedPokemon = [];
 let allPokemon = [];
+let searchPokemon = [];
 let detailViewOpen = false;
 
-
 async function init() {
-    await loadAllPokemon();
-    // for (let i = 1; i < 10; i++) {
-    //     await loadPokemon(i);
-    //     addPokemon();
-    // };
+    await loadAllPokemonData();
+    searchPokemon = [...allPokemon];
     renderPokemonListItems(currentIndex,currentIndex + 30);
-    // onscrollLoadMorePokemon();
+}
+
+// LOCAL STORAGE
+
+function setItem(key,data) {
+    localStorage.setItem(key,JSON.stringify(data));
+}
+
+function getItem(key) {
+    if (localStorage.getItem(key)) {
+        return JSON.parse(localStorage.getItem(key));
+    }
+}
+
+function loadAllPokemonFromLocalStorage() {
+    if (getItem('allPokemon') != null) {
+        allPokemon = getItem('allPokemon');
+        console.log('STORAGE');
+        return true;
+    } else {
+        return false 
+    };
+}
+
+// SEARCH
+function searchPokemonName() {
+    let search = document.getElementById('search').value.toLowerCase();
+    searchPokemon = [];
+    currentIndex = 0;
+    allPokemon.forEach((pokemon) => pokemon['name'].includes(search) ? searchPokemon.push(pokemon) : null);
+    document.getElementById('pkmn-list').innerHTML = '';
+    const end = searchPokemon.length >= 30 ? 30 : searchPokemon.length;
+    renderPokemonListItems(0,end);
 }
 
 function renderPokemonListItems(start,end) {
@@ -27,21 +56,26 @@ function renderPokemonListItems(start,end) {
     currentIndex = end;
 }
 
+async function loadAllPokemonData() {
+    loadAllPokemonFromLocalStorage() ? loadAllPokemonFromLocalStorage() : await loadAllPokemon();
+}
+
 async function loadAllPokemon() { 
         let url = `https://pokeapi.co/api/v2/pokemon?offset=0&limit=${LAST_POKEMON_ID}`;
         let response = await fetch(url);
         allPokemon.push(await response.json());
         allPokemon = allPokemon[0]['results'];
-        console.log(allPokemon);
         // addIdToAllPokemon
         for (let i = 0; i < allPokemon.length; i++) {
             allPokemon[i]['id'] = i + 1;
             allPokemon[i]['types'] = [];
             allPokemon[i]['image'] = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${i + 1}.png`;
+            allPokemon[i]['liked'] = false;
         };
         // addTypesToAllPokemon
         await addTypesToAllPokemon();
-        console.log('loaded');
+        setItem('allPokemon',allPokemon);
+        console.log('API');
 }
 
 async function addTypesToAllPokemon() {
@@ -51,15 +85,11 @@ async function addTypesToAllPokemon() {
         let responseAsJSON = await response.json();
         let type = responseAsJSON['name'];
         let allPokemonWithType = responseAsJSON['pokemon'];
-        // console.log(type);
-        // console.log(allPokemonWithType);
-        // console.log(allPokemonWithType[0]['pokemon']);
         for (let j = 0; j < allPokemonWithType.length; j++) {
             const pokemonUrl = allPokemonWithType[j]['pokemon']['url'];
             const pokemonID = pokemonUrl.match(/\/(\d+)\/$/)[1];
             const typeSlot = allPokemonWithType[j]['slot']; // Is it the main type or the secondary type?
             let index = allPokemon.findIndex( p => p['id'] == pokemonID);
-            // console.log(index);
             if (index >= 0) {
                 if (typeSlot == 1) {
                     allPokemon[index].types[0] = type;
@@ -67,8 +97,6 @@ async function addTypesToAllPokemon() {
                 if (typeSlot == 2) {
                     allPokemon[index].types[1] = type;
                 }
-                
-                // console.log(pokemonInAllPokemonArray['types']);
             }
         }
     }
@@ -79,25 +107,27 @@ async function addTypesToAllPokemon() {
  * @param {number} idOrName - id or name of the pokemon in the pokédex
  */
 async function loadPokemon(idOrName) {
-    let url = `https://pokeapi.co/api/v2/pokemon/${idOrName}`;
-    let response = await fetch(url);
-    currentPokemon = await response.json();
-    saveLoadedPokemon();
-    console.log(currentPokemon);
+    let loaded = loadedPokemon.find( p => p['name'] == idOrName || p['id'] == idOrName);
+    if (!loaded) {
+        let url = `https://pokeapi.co/api/v2/pokemon/${idOrName}`;
+        let response = await fetch(url);
+        currentPokemon = await response.json();
+        saveLoadedPokemon();
+    } else {
+        currentPokemon = loaded;
+    }
 }
 
 async function loadSpecies(idOrName) {
     let url = `https://pokeapi.co/api/v2/pokemon-species/${idOrName}/`;
     let response = await fetch(url);
     currentSpecies = await response.json();
-    console.log(currentSpecies);
 }
 
 async function loadEvolutionChain(id) {
     let url = id;
     let response = await fetch(url);
     currentEvolutionChain = await response.json();
-    console.log(currentEvolutionChain);
 }
 
 
@@ -110,32 +140,31 @@ function saveLoadedPokemon() {
     if (!isCurrentPokemonSaved) {
         loadedPokemon.push(currentPokemon);
     } else {
-        console.log('Pokemon already loaded.')
+        console.log('Pokemon already loaded.');
     }
 }
 
 
-function addPokemon() {
-    let id = currentPokemon['id'];
-    let number = currentPokemon['id'];
-    number = number.toString().padStart(4, '0'); // #0001 pad a string until it reaches the desired length
-    let name = currentPokemon['name'];
-    name = name.charAt(0).toUpperCase() + name.slice(1); // capitalize first letter
-    let types = currentPokemon['types'];
-    let image = currentPokemon['sprites']['other']['official-artwork']['front_default'];
-    let pkmnList = document.getElementById('pkmn-list');
-    if(!document.getElementById(`pkmn-id-${number}`)) {
-        pkmnList.innerHTML += pkmnListItemHTML(number,name,types,image,id);
-    } else {
-        console.log('Pokmon already rendered')
-    }
-}
+// function addPokemon() {
+//     let id = currentPokemon['id'];
+//     let number = currentPokemon['id'];
+//     number = number.toString().padStart(4, '0'); // #0001 pad a string until it reaches the desired length
+//     let name = currentPokemon['name'];
+//     name = name.charAt(0).toUpperCase() + name.slice(1); // capitalize first letter
+//     let types = currentPokemon['types'];
+//     let image = currentPokemon['sprites']['other']['official-artwork']['front_default'];
+//     let pkmnList = document.getElementById('pkmn-list');
+//     if(!document.getElementById(`pkmn-id-${number}`)) {
+//         pkmnList.innerHTML += pkmnListItemHTML(number,name,types,image,id);
+//     } else {
+//         console.log('Pokmon already rendered')
+//     }
+// }
 
 
 function generateTypeBadges(types) {
     let typesHTML = ''
     for (let i = 0; i < types.length; i++) {
-        // let type = types[i]['type']['name'];
         let type = types[i];
         typesHTML += /*html*/`
             <div class="type ${type}">${type}</div>
@@ -146,7 +175,7 @@ function generateTypeBadges(types) {
 
 
 async function generatePokemonListItem(i) {
-    let pokemon = allPokemon[i];
+    let pokemon = searchPokemon[i];
     let id = pokemon['id'];
     let number = pokemon['id'].toString().padStart(4,'0');
     let name = pokemon['name'];
@@ -184,22 +213,20 @@ function pkmnListItemHTML(number,name,types,image,id) {
  * activate scroll eventListener to load more pokemon on scroll
  */
 function onscrollLoadMorePokemon() {
-    // document.getElementById('pkmn-list').addEventListener("scroll" ,function() {
         let pkmnList = document.getElementById('pkmn-list');
         if (pkmnList.scrollHeight - pkmnList.offsetHeight == pkmnList.scrollTop) {
-            // loadNextPokemon();
-            renderPokemonListItems(currentIndex,currentIndex + 5);
+            const end = currentIndex + 5 < searchPokemon.length ? currentIndex + 5 : searchPokemon.length;
+            renderPokemonListItems(currentIndex,end);
         };
-    // });
 }
 
 /**
  * loads the next higher pokemon id and adds it to the list
  */
-async function loadNextPokemon() {
-    await loadPokemon(currentPokemon['id'] + 1);
-    addPokemon();
-}
+// async function loadNextPokemon() {
+//     await loadPokemon(currentPokemon['id'] + 1);
+//     addPokemon();
+// }
 
 
 /**
@@ -209,17 +236,22 @@ async function loadNextPokemon() {
 
 async function openDetailView(id) {
     let popupContainer = document.getElementById('popup-container');
-    popupContainer.classList.remove('d-none');
-    popupContainer.innerHTML = await generateDetailViewHTML(id);
+    let popupDetailView = document.getElementById('popup-detail-view');
+    popupDetailView.innerHTML = await generateDetailViewHTML(id);
+    getLikeImage(id);
     document.documentElement.style.setProperty('--color-active-type', `var(--color-${currentPokemon['types'][0]['type']['name']})`);
+    popupContainer.classList.remove('d-none');
+    document.getElementById('image-slide-current').scrollIntoView({behavior: 'instant'}); // Focus On Image Slide 3
+    setupImageSlider();
 }
 
 
 
 function closeDetailView() {
     let popupContainer = document.getElementById('popup-container');
+    let popupDetailView = document.getElementById('popup-detail-view');
     popupContainer.classList.add('d-none');
-    popupContainer.innerHTML = '';
+    popupDetailView.innerHTML = '';
 }
 
 
@@ -228,6 +260,8 @@ async function generateDetailViewHTML(id) {
     await loadSpecies(id);
     await loadEvolutionChain(currentSpecies['evolution_chain']['url']);
     let pokemon = loadedPokemon.find( p => p['id'] == id);
+    let prevPokemon = allPokemon.find( p => p['id'] == id - 1) ? allPokemon.find( p => p['id'] == id - 1) : null;
+    let nextPokemon = allPokemon.find( p => p['id'] == id + 1) ? allPokemon.find( p => p['id'] == id + 1) : null;
     let pkmnTypes = getTypesFromPokemon(pokemon);
     let pkmnNumber = id.toString().padStart(4, '0');
     let pkmnName = pokemon['name'];
@@ -251,26 +285,31 @@ async function generateDetailViewHTML(id) {
     let pkmnStatTotal = pkmnHP + pkmnATK + pkmnDEF + pkmnSpATK + pkmnSpDEF + pkmnSPEED;
     // EVOLUTION 
     return /*html*/`
-         <div class="popup-detail-view ${pkmnTypes[0]}">
-            <div class="popup-dv-header">
-                <button onclick="closeDetailView()">
-                    <img src="./img/arrow-back.svg" alt="back-arrow">
-                </button>
-                <div class="popup-dv-number">${pkmnNumber}</div>
-                <button onclick="">
-                    <img src="./img/heart.svg" alt="back-arrow">
-                </button>
-            </div>
-            <div class="popup-dv-top-container">
-                <div class="popup-dv-pkmn-name">${pkmnName}</div>
-                <div class="popup-dv-pkmn-types-container">
-                    ${generateTypeBadges(pkmnTypes)}
+            <div class="popup-dv-top">
+                <div class="popup-dv-header">
+                    <button onclick="closeDetailView()">
+                        <img src="./img/arrow-back.svg" alt="back-arrow">
+                    </button>
+                    <div class="popup-dv-number">${pkmnNumber}</div>
+                    <button onclick="toggleLike(${id})">
+                        <img id="popup-dv-like" src="./img/heart.svg" alt="back-arrow">
+                    </button>
                 </div>
-                <div class="popup-dv-image-slider">
-                    <img class="popup-dv-pkmn-image" src="${pkmnImage}" alt="${pkmnName}_img">
-                </div> 
+                <div class="popup-dv-top-container">
+                    <div class="popup-dv-pkmn-name">${pkmnName}</div>
+                    <div class="popup-dv-pkmn-types-container">
+                        ${generateTypeBadges(pkmnTypes)}
+                    </div>
+                    <div id="popup-dv-image-slider" class="popup-dv-image-slider" onscroll="slideToPokemon(${id})">
+                        ${generatePrevSlide(prevPokemon)}
+                        <div id="image-slide-current" class="image-slide">
+                            <img class="popup-dv-pkmn-image" src="${pkmnImage}" alt="${pkmnName}_img">
+                        </div>
+                        ${generateNextSlide(nextPokemon)}
+                    </div> 
+                </div>
             </div>
-            <div class="popup-dv-info-container">
+            <div id="popup-dv-info-container" class="popup-dv-info-container">
                 <div class="popup-dv-info-nav">
                     <a class="nav-menu-item active" href="#info-slide-1">
                         <p>About</p>
@@ -281,9 +320,6 @@ async function generateDetailViewHTML(id) {
                     <a class="nav-menu-item" href="#info-slide-3">
                         <p>Evolution</p>
                     </a>
-                    <!-- <a class="nav-menu-item" href="#info-slide-4">
-                        <p>Moves</p>
-                    </a> -->
                 </div>
                 <div id="popup-dv-info-slider" class="popup-dv-info-slider" onscroll="checkShownInfo()">
                     <!-- ABOUT -->
@@ -398,63 +434,57 @@ async function generateDetailViewHTML(id) {
                             </tbody>
                         </table>
                     </div>
-                    <!-- MOVES -->
-                    <!-- <div id="info-slide-4" class="popup-dv-info-slide">
-                        <table>
-                            <tbody>
-                                <tr class="info-slide-tr">
-                                    <td class="move-name">Tackle</td>
-                                    <td class="move-stats">
-                                        <div class="move-stats-container">
-                                            <div class="move-power">40</div>
-                                            <div class="move-accuracy">100</div>
-                                        </div>
-                                    </td>
-                                    <td class="move-type">
-                                        <div class="move-type-container">
-                                            <div class="type normal">Normal</div>
-                                            <div class="damage-category">Phys.</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="info-slide-tr">
-                                    <td class="move-name">Ruckzuckhieb</td>
-                                    <td class="move-stats">
-                                        <div class="move-stats-container">
-                                            <div class="move-power">40</div>
-                                            <div class="move-accuracy">100</div>
-                                        </div>
-                                    </td>
-                                    <td class="move-type">
-                                        <div class="move-type-container">
-                                            <div class="type fighting">Fighting</div>
-                                            <div class="damage-category">Phys.</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="info-slide-tr">
-                                    <td class="move-name">Menacing Moonraze Maelstrom</td>
-                                    <td class="move-stats">
-                                        <div class="move-stats-container">
-                                            <div class="move-power">40</div>
-                                            <div class="move-accuracy">100</div>
-                                        </div>
-                                    </td>
-                                    <td class="move-type">
-                                        <div class="move-type-container">
-                                            <div class="type normal">Normal</div>
-                                            <div class="damage-category">Phys.</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> -->
                 </div>
             </div>
-        </div>
-    `;
-    
+    `; 
+}
+
+// LIKE
+function getLikeImage(id) {
+    let pokemon = allPokemon.find( p => p['id'] == id);
+    let likeImage = document.getElementById('popup-dv-like');
+    if (pokemon['liked']) {
+        likeImage.src = './img/heart-filled.svg';
+        likeImage.classList.add('liked');
+        setTimeout(function() {likeImage.classList.remove('liked');}, 125);
+    } else {
+        likeImage.src = './img/heart.svg';
+    };
+}
+
+function toggleLike(id) {
+    let pokemon = allPokemon.find( p => p['id'] == id);
+    pokemon['liked'] = pokemon['liked'] ? false : true;
+    getLikeImage(id);
+    setItem('allPokemon',allPokemon);
+}
+
+
+
+// IMAGE SLIDES
+
+function generatePrevSlide(prevPokemon) {
+    if (prevPokemon != null) {
+        return /*html*/`
+            <div id="image-slide-prev" class="image-slide pkmn-hidden">
+                <img class="popup-dv-pkmn-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${prevPokemon['id']}.png" alt="${prevPokemon['name']}_img">
+            </div>
+        `;
+    } else {
+        return '';
+    };
+}
+
+function generateNextSlide(nextPokemon) {
+    if (nextPokemon != null) {
+        return /*html*/`
+            <div id="image-slide-next" class="image-slide pkmn-hidden">
+                <img class="popup-dv-pkmn-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${nextPokemon['id']}.png" alt="${nextPokemon['name']}_img">
+            </div>
+        `;
+    } else {
+        return '';
+    };
 }
 
 
@@ -580,7 +610,6 @@ function generateEvolutionChain() {
 
 
 function generateEvolutionDetails(evolutionDetails) {
-    // let output = ``;
     let trigger = getEvolutionDetailsTrigger(evolutionDetails);
     let gender = getEvolutionDetailsGenderInfo(evolutionDetails);
     let heldItem = getEvolutionDetailsHeldItem(evolutionDetails);
@@ -855,12 +884,15 @@ function getEvolutionDetailsTurnUpsideDown(evolutionDetails) {
     }
 }
 
+
+// INFO SLIDER HIGHLIGHT
 function checkShownInfo() {
+    let popup = document.getElementById('popup-dv-info-slider');
     let slides = document.getElementsByClassName('popup-dv-info-slide');
     let navMenuItems = document.getElementsByClassName('nav-menu-item');
     for (let i = 0; i < slides.length; i++) {
         const slide = slides[i];
-        if (slide.getBoundingClientRect().left == 40) {
+        if (Math.round(slide.getBoundingClientRect().left) == Math.round(popup.getBoundingClientRect().left)) {
             for (let j = 0; j < navMenuItems.length; j++) {
                 navMenuItems[j].classList.remove('active');
             };
@@ -868,3 +900,52 @@ function checkShownInfo() {
         }
     }
 }
+
+// SLIDE TO PREV/NEXT POKEMON
+function slideToPokemon(id) {
+    let popup = document.getElementById('popup-detail-view');
+    let prev = document.getElementById('image-slide-prev');
+    let next = document.getElementById('image-slide-next');
+    console.log(next.getBoundingClientRect().left);
+    console.log(popup.getBoundingClientRect().left);
+    if (prev != null && Math.floor(prev.getBoundingClientRect().left) == Math.floor(popup.getBoundingClientRect().left)) {
+        if (allPokemon.find( p => p['id'] == id - 1))
+        prev.classList.remove('pkmn-hidden');
+        openDetailView(id - 1); 
+    }
+    if (next != null && Math.floor(next.getBoundingClientRect().left) == Math.floor(popup.getBoundingClientRect().left)) {
+        if (allPokemon.find( p => p['id'] == id + 1))
+        openDetailView(id + 1);
+    }
+}
+
+// DRAGSCROLL ON DESKTOP FOR IMAGE SLIDER
+function setupImageSlider() {
+    const imageSlider = document.getElementById('popup-dv-image-slider');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    imageSlider?.addEventListener('mousedown', (e) => {
+        isDown = true;
+        imageSlider.classList.add('image-slider-active');
+        startX = e.pageX - imageSlider.offsetLeft;
+        scrollLeft = imageSlider.scrollLeft;
+    })
+    imageSlider?.addEventListener('mouseleave', () => {
+        isDown = false;
+        imageSlider.classList.remove('image-slider-active');
+      });
+    imageSlider?.addEventListener('mouseup', () => {
+      isDown = false;
+      imageSlider.classList.remove('image-slider-active');
+    });
+    imageSlider?.addEventListener('mousemove', (e) => {
+      if(!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - imageSlider.offsetLeft;
+      const walk = (x - startX) * 2; //scroll-fast
+      imageSlider.scrollLeft = scrollLeft - walk;
+    });
+}
+
