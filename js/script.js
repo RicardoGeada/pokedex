@@ -272,7 +272,7 @@ async function init() {
      */
     function onscrollLoadMorePokemon() {
         let pkmnList = document.getElementById('pkmn-list');
-        if (pkmnList.scrollHeight - pkmnList.offsetHeight == pkmnList.scrollTop) {
+        if (pkmnList.scrollHeight - pkmnList.offsetHeight - pkmnList.scrollTop < 10 ) {
             const end = currentIndex + 5 < searchPokemon.length ? currentIndex + 5 : searchPokemon.length;
             renderPokemonListItems(currentIndex,end);
         };
