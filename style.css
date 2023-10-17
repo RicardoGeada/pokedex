@@ -34,6 +34,53 @@ button {
     cursor: pointer;
 }
 
+/* Loading Screen */
+.loading-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.loading-image {
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+    filter: invert() opacity(0.2);
+}
+
+.loading-text {
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.2);
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar {
     width: 12px;
@@ -46,10 +93,6 @@ button {
 
 ::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    /* background-image: url(./img/pokeball_white.svg); */
-    /* background-repeat: no-repeat; */
-    /* background-position: center center; */
-    /* background-size: contain; */
     background-color: var(--color-active-type);
     border: 2px solid white;
 }
@@ -113,7 +156,6 @@ body {
 }
 
 .pkmn-card {
-    /* height: 80px; */
     width: 300px;
     border-radius: 8px;
     display: flex;
@@ -122,7 +164,6 @@ body {
     color: white;
     padding: 8px 16px;
     position: relative;
-    /* gap: 8px; */
 }
 
 .pkmn-card-number {
@@ -141,15 +182,12 @@ body {
     font-weight: 700;
     font-size: 24px;
     text-transform: capitalize;
-    /* position: absolute; */
     top: 12px;
 }
 
 .pkmn-type-container {
     display: flex;
     gap: 8px;
-    /* position: absolute; */
-    /* bottom: 12px; */
     font-size: 12px;
 }
 
@@ -201,7 +239,6 @@ body {
     max-width: 400px;
     max-height: 800px;
     border-radius: 24px;
-    /* padding: 32px 0px 0; */
     overflow: hidden;
     position: relative;
     transition: background 0.5s ease-in-out;
@@ -209,16 +246,6 @@ body {
     flex-direction: column;
 }
 
-/* .popup-detail-view:after {
-    position: absolute;
-    content:"";
-    height:50%;
-    width:100%;
-    top:0;
-    left:0;
-    background: linear-gradient(to top, rgba(255,0,0,0) 0%,rgba(255, 255, 255, 0.65) 100%);
-    mix-blend-mode: multiply;
-} */
 
 .popup-dv-top {
     padding-top: 32px;
@@ -272,14 +299,11 @@ body {
 .popup-dv-image-slider {
     width: 100%;
     display: flex;
-    /* justify-content: center; */
     align-items: center;
     position: absolute;
     top: calc(50% - 160px);
     z-index: 3;
-    /* gap: 50px; */
     overflow-y: scroll;
-    /* position: relative; */
     scroll-snap-type: x mandatory;
 }
 
@@ -297,7 +321,6 @@ body {
 }
 
 .image-slide {
-    /* min-width: calc(100% - 240px); */
     min-height: 160px;
     flex: 1 0 100%;
     scroll-snap-align: center;
@@ -309,10 +332,6 @@ body {
 .pkmn-hidden {
     filter: brightness(0) opacity(0.75);
 }
-
-/* .pkmn-hidden img {
-    transform: scale(0.75);
-} */
 
 .popup-dv-pkmn-image {
     height: 160px;
@@ -328,17 +347,15 @@ body {
 .popup-dv-info-container {
     background-color: white;
     border-radius: 24px;
-    height: calc(50% + 48px);
+    height: calc(50% + 24px);
     width: 100%;
     position: relative;
-    /* top: calc(50% - 24px); */
     padding: 24px 24px 24px;
 }
 
 .popup-dv-info-nav {
     display: flex;
     justify-content: space-between;
-    /* gap: 24px; */
     padding-bottom: 4px;
 }
 
@@ -445,7 +462,7 @@ body {
     width: 0%;
     height: 100%;
     border-radius: 8px;
-    transition: width ease-in-out 0.75ms;
+    transition: width ease-in-out 75ms;
 }
 
 .popup-dv-info-slide .total {
@@ -524,8 +541,6 @@ body {
 
 .move-power {
     background-color: rgba(0, 0, 0, 0.2);
-    /* color: white; */
-    /* font-weight: 700; */
     padding: 4px 8px;
     border-radius: 50rem 0 0 50rem;
     width: 40px;
@@ -534,8 +549,6 @@ body {
 
 .move-accuracy {
     background-color: rgba(0, 0, 0, 0.2);
-    /* color: white; */
-    /* font-weight: 700; */
     padding: 4px 8px;
     border-radius: 0px 50rem 50rem 0px;
     width: 40px;
@@ -549,7 +562,6 @@ body {
 .damage-category {
     padding: 4px 8px;
     border-radius: 50rem;
-    /* filter: brightness(1.1); */
     color: white;
     font-weight: 700;
     width: fit-content;
@@ -564,75 +576,75 @@ body {
 /* Pokemon Type Colors */
 
 .bug {
-    background-color: #A7B820;
+    background-color: var(--color-bug);
 }
 
 .dark {
-    background-color: #705848;
+    background-color: var(--color-dark);
 }
 
 .dragon {
-    background-color: #7038F8;
+    background-color: var(--color-dragon);
 }
 
 .electric {
-    background-color: #F8D030;
+    background-color: var(--color-electric);
 }
 
 .fairy {
-    background-color: #EE99AC;
+    background-color: var(--color-fairy);
 }
 
 .fighting {
-    background-color: #BF3028;
+    background-color: var(--color-fighting);
 }
 
 .fire {
-    background-color: #F18030;
+    background-color: var(--color-fire);
 }
 
 .flying {
-    background-color: #A990F0;
+    background-color: var(--color-flying);
 }
 
 .ghost {
-    background-color: #705897;
+    background-color: var(--color-ghost);
 }
 
 .grass {
-    background-color: #78C850;
+    background-color: var(--color-grass);
 }
 
 .ground {
-    background-color: #E0C068;
+    background-color: var(--color-ground);
 }
 
 .ice {
-    background-color: #98D8D8;
+    background-color: var(--color-ice);
 }
 
 .normal {
-    background-color: #A8A878;
+    background-color: var(--color-normal);
 }
 
 .poison {
-    background-color: #8435B4;
+    background-color: var(--color-poison);
 }
 
 .psychic {
-    background-color: #F85888;
+    background-color: var(--color-psychic);
 }
 
 .rock {
-    background-color: #B8A038;
+    background-color: var(--color-rock);
 }
 
 .steel {
-    background-color: #B8B8D0;
+    background-color: var(--color-steel);
 }
 
 .water {
-    background-color: #6990F0;
+    background-color: var(--color-water);
 }
 
 

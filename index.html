@@ -7,7 +7,9 @@
     <link rel="icon" href="./img/favicon.svg" type="image/x-icon">
     <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <script src="./js/script.js"></script>
+    <script src="./js/pokemon_detail_view.js"></script>
+    <script src="./js/pokemon_detail_view_HTML.js"></script>
 </head>
 <body onload="init()">
     <h1>Pokédex</h1>
@@ -21,6 +23,11 @@
     <div id="popup-container" class="popup-container d-none">
         <div id="popup-detail-view" class="popup-detail-view">
         </div>
+    </div>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <img class="loading-image" src="./img/pokeball_white.svg" alt="pokeball-white">
+        <div class="loading-text">Load Pokemon</div>
     </div>
 </body>
 </html>
