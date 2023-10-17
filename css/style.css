@@ -144,6 +144,7 @@ body {
     gap: 8px;
     overflow-y: auto;
     width: 100%;
+    padding-left: 12px;
 }
 
 .pkmn-list-item {
@@ -658,8 +659,13 @@ body {
     .popup-container {
         padding: 0;
     }
+
     .popup-detail-view {
         border-radius: 0;
+    }
+
+    .pkmn-list {
+        padding: 0;
     }
 
     .popup-dv-info-container {
