@@ -214,6 +214,7 @@ async function init() {
         let pkmnList = document.getElementById('pkmn-list');
         if(!document.getElementById(`pkmn-id-${number}`)) {
             pkmnList.innerHTML += pkmnListItemHTML(number,name,types,image,id);
+            setLikeImage(id);
         };
     }
 
@@ -245,7 +246,8 @@ async function init() {
                         <path d="M80 37.1223C78.5213 16.3741 61.1777 0 40 0C18.8223 0 1.47873 16.3741 0 37.1223H20.884C22.2768 27.8389 30.3049 20.7194 40 20.7194C49.6951 20.7194 57.7232 27.8389 59.116 37.1223H80Z" fill="white"/>
                         <path d="M0.0215476 43.1655H20.9294C22.4433 52.3078 30.4053 59.2806 40 59.2806C49.5947 59.2806 57.5567 52.3078 59.0706 43.1655H79.9785C78.3607 63.7771 61.0797 80 40 80C18.9203 80 1.63933 63.7771 0.0215476 43.1655Z" fill="white"/>
                         <path d="M40 52.9496C47.1702 52.9496 52.9827 47.1519 52.9827 40C52.9827 32.8481 47.1702 27.0504 40 27.0504C32.8298 27.0504 27.0173 32.8481 27.0173 40C27.0173 47.1519 32.8298 52.9496 40 52.9496Z" fill="white"/>
-                    </svg>    
+                    </svg>
+                    <img id="pkmn-card-heart-${id}" class="pkmn-card-heart" src="./img/heart.svg" alt="heart-icon">    
                 </div>
             </li>
         `;
@@ -276,6 +278,12 @@ async function init() {
             const end = currentIndex + 5 < searchPokemon.length ? currentIndex + 5 : searchPokemon.length;
             renderPokemonListItems(currentIndex,end);
         };
+    }
+
+
+    function loadMorePokemon() {
+            const end = currentIndex + 5 < searchPokemon.length ? currentIndex + 20 : searchPokemon.length;
+            renderPokemonListItems(currentIndex,end);
     }
 
 //#endregion LIST VIEW

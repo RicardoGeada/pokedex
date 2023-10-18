@@ -81,13 +81,18 @@ async function generateDetailViewHTML(id) {
 function setLikeImage(id) {
     let pokemon = allPokemon.find( p => p['id'] == id);
     let likeImage = document.getElementById('popup-dv-like');
-    if (pokemon['liked']) {
-        likeImage.src = './img/heart-filled.svg';
-        likeImage.classList.add('liked');
-        setTimeout(function() {likeImage.classList.remove('liked');}, 125);
-    } else {
-        likeImage.src = './img/heart.svg';
-    };
+    let listLikeImage = document.getElementById(`pkmn-card-heart-${id}`);
+    let likeImages = [likeImage, listLikeImage];
+    for (let i = 0; i < likeImages.length; i++) {
+        const image = likeImages[i];
+        if (image && pokemon['liked']) {
+            image.src = './img/heart-filled.svg';
+            image.classList.add('liked');
+            setTimeout(function() {image.classList.remove('liked');}, 125);
+        } else if (image && !pokemon['liked']) {
+            image.src = './img/heart.svg';
+        }
+    }       
 }
 
 

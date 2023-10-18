@@ -109,7 +109,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 0 0;
+    padding: 16px 0 16px;
     gap: 16px;
 }
 
@@ -139,8 +139,10 @@ body {
 
 .pkmn-list {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 8px;
     overflow-y: auto;
     width: 100%;
@@ -215,6 +217,29 @@ body {
     opacity: 25%;
 }
 
+.pkmn-card-heart {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    height: 12px;
+}
+
+.load-more-button {
+    font-weight: 700;
+    color: white;
+    background-color: white;
+    padding: 8px;
+    border-radius: 10px;
+    max-width: 40px;
+    aspect-ratio: 1 / 1;
+    /* position: fixed; */
+    /* bottom: 16px; */
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.load-more-button:hover {
+    filter: invert();
+}
 
 /* POPUP - DETAIL VIEW */
 
@@ -488,7 +513,7 @@ body {
 }
 
 .evolution-image:hover {
-    background-image: url(./img/pokeball_white.svg);
+    background-image: url(../img/pokeball_white.svg);
     background-blend-mode: unset;
     background-size: 80%;
     background-position: center;
@@ -656,6 +681,10 @@ body {
         display: none;
     }
 
+    body {
+        gap: 16px;
+    }
+
     .popup-container {
         padding: 0;
     }
@@ -673,6 +702,7 @@ body {
         border-radius: 24px 24px 0 0;
     }
 }
+
 
 @media (orientation: landscape) and (max-height: 700px)  {
     .popup-container {
