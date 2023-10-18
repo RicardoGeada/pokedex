@@ -155,7 +155,7 @@ function getAbilitesFromPokemon(pokemon) {
  * @returns string
  */
 function getFlavorText() {
-    if (currentSpecies['flavor_text_entries'] != null) {
+    if (currentSpecies['flavor_text_entries'] != null && currentSpecies['flavor_text_entries'].length > 0) {
         let flavorText = currentSpecies['flavor_text_entries'].findLast(text => text['language']['name'] == 'en');
         return flavorText['flavor_text'];
     } else {
@@ -242,44 +242,46 @@ function generateEvolutionChain() {
  * @returns 
  */
 function generateEvolutionDetails(evolutionDetails) {
-    let trigger = generateTriggerHTML(evolutionDetails);
-    let gender = generateGenderInfoHTML(evolutionDetails);
-    let heldItem = generateHeldItemHTML(evolutionDetails);
-    let item = generateItemHTML(evolutionDetails);
-    let knownMove = generateKnownMoveHTML(evolutionDetails);
-    let knownMoveType = generateKnownMoveTypeHTML(evolutionDetails);
-    let location = generateLocationHTML(evolutionDetails);
-    let minAffection = generateMinAffectionHTML(evolutionDetails);
-    let minBeauty = generateMinBeautyHTML(evolutionDetails);
-    let minHappiness = generateMinHappinessHTML(evolutionDetails);
-    let minLvl = generateMinLvlHTML(evolutionDetails);
-    let needsOverworldRain = generateNeedsOverworldRainHTML(evolutionDetails);
-    let partySpecies = generatePartySpeciesHTML(evolutionDetails);
-    let partyType = generatePartyTypeHTML(evolutionDetails);
-    let relativePhysicalStats = generateRelativePhysicalStatsHTML(evolutionDetails);
-    let timeOfDay = generateTimeOfDayHTML(evolutionDetails);
-    let tradeSpecies = generateTradeSpeciesHTML(evolutionDetails);
-    let turnUpsideDown = generateTurnUpsideDownHTML(evolutionDetails);
-    return /*html*/`
-        ${trigger}
-        ${gender}
-        ${heldItem}
-        ${item}
-        ${knownMove}
-        ${knownMoveType}
-        ${location}
-        ${minAffection}
-        ${minBeauty}
-        ${minHappiness}
-        ${minLvl}
-        ${needsOverworldRain}
-        ${partySpecies}
-        ${partyType}
-        ${relativePhysicalStats}
-        ${timeOfDay}
-        ${tradeSpecies}
-        ${turnUpsideDown}
-    `;
+    if (evolutionDetails) {
+        let trigger = generateTriggerHTML(evolutionDetails);
+        let gender = generateGenderInfoHTML(evolutionDetails);
+        let heldItem = generateHeldItemHTML(evolutionDetails);
+        let item = generateItemHTML(evolutionDetails);
+        let knownMove = generateKnownMoveHTML(evolutionDetails);
+        let knownMoveType = generateKnownMoveTypeHTML(evolutionDetails);
+        let location = generateLocationHTML(evolutionDetails);
+        let minAffection = generateMinAffectionHTML(evolutionDetails);
+        let minBeauty = generateMinBeautyHTML(evolutionDetails);
+        let minHappiness = generateMinHappinessHTML(evolutionDetails);
+        let minLvl = generateMinLvlHTML(evolutionDetails);
+        let needsOverworldRain = generateNeedsOverworldRainHTML(evolutionDetails);
+        let partySpecies = generatePartySpeciesHTML(evolutionDetails);
+        let partyType = generatePartyTypeHTML(evolutionDetails);
+        let relativePhysicalStats = generateRelativePhysicalStatsHTML(evolutionDetails);
+        let timeOfDay = generateTimeOfDayHTML(evolutionDetails);
+        let tradeSpecies = generateTradeSpeciesHTML(evolutionDetails);
+        let turnUpsideDown = generateTurnUpsideDownHTML(evolutionDetails);
+        return /*html*/`
+            ${trigger}
+            ${gender}
+            ${heldItem}
+            ${item}
+            ${knownMove}
+            ${knownMoveType}
+            ${location}
+            ${minAffection}
+            ${minBeauty}
+            ${minHappiness}
+            ${minLvl}
+            ${needsOverworldRain}
+            ${partySpecies}
+            ${partyType}
+            ${relativePhysicalStats}
+            ${timeOfDay}
+            ${tradeSpecies}
+            ${turnUpsideDown}
+        `;
+    }
 }
 
 

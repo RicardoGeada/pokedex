@@ -45,7 +45,7 @@ function popupDetailViewHTML(id,prevPokemon,nextPokemon,pkmnTypes,pkmnNumber,pkm
             <div id="popup-dv-image-slider" class="popup-dv-image-slider" onscroll="slideToPokemon(${id})">
                 ${generatePrevSlideHTML(prevPokemon)}
                 <div id="image-slide-current" class="image-slide">
-                    <img class="popup-dv-pkmn-image" src="${pkmnImage}" alt="${pkmnName}_img">
+                    <img class="popup-dv-pkmn-image" src="${pkmnImage}" alt="${pkmnName}_img" onerror="this.src='./img/not-found.svg'">
                 </div>
                 ${generateNextSlideHTML(nextPokemon)}
             </div> 
@@ -192,7 +192,7 @@ function popupDetailViewHTML(id,prevPokemon,nextPokemon,pkmnTypes,pkmnNumber,pkm
         if (prevPokemon != null) {
             return /*html*/`
                 <div id="image-slide-prev" class="image-slide pkmn-hidden">
-                    <img class="popup-dv-pkmn-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${prevPokemon['id']}.png" alt="${prevPokemon['name']}_img">
+                    <img class="popup-dv-pkmn-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${prevPokemon['id']}.png" alt="${prevPokemon['name']}_img" onerror="this.src='./img/not-found.svg'">
                 </div>
             `;
         } else {
@@ -210,7 +210,7 @@ function popupDetailViewHTML(id,prevPokemon,nextPokemon,pkmnTypes,pkmnNumber,pkm
         if (nextPokemon != null) {
             return /*html*/`
                 <div id="image-slide-next" class="image-slide pkmn-hidden">
-                    <img class="popup-dv-pkmn-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${nextPokemon['id']}.png" alt="${nextPokemon['name']}_img">
+                    <img class="popup-dv-pkmn-image" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${nextPokemon['id']}.png" alt="${nextPokemon['name']}_img" onerror="this.src='./img/not-found.svg'">
                 </div>
             `;
         } else {
@@ -263,14 +263,14 @@ function evolutionChainHTML(base,evolution,evolutionDetails) {
     return /*html*/`
         <tr class="info-slide-tr">
             <td class="evolution-base">
-                <img class="evolution-image" src="${base['image']}" alt="${base['name']}_img" onclick="openDetailView(${base['id']})">
+                <img class="evolution-image" src="${base['image']}" alt="${base['name']}_img" onclick="openDetailView(${base['id']})" onerror="this.src='./img/not-found.svg'">
                 <div class="evolution-name">${base['name']}</div>
             </td>
             <td class="evolution-trigger">
                 ${evolutionDetails}
             </td>
             <td class="evolves-to">
-                <img class="evolution-image" src="${evolution['image']}" alt="${evolution['name']}_img" onclick="openDetailView(${evolution['id']})">
+                <img class="evolution-image" src="${evolution['image']}" alt="${evolution['name']}_img" onclick="openDetailView(${evolution['id']})" onerror="this.src='./img/not-found.svg'">
                 <div class="evolution-name">${evolution['name']}</div>
             </td>
         </tr> 
@@ -286,9 +286,16 @@ function evolutionChainHTML(base,evolution,evolutionDetails) {
      * @returns HTML
      */
     function generateTriggerHTML(evolutionDetails) {
-        return /*html*/`
+        if (evolutionDetails['trigger']) {
+            return /*html*/`
             <div class="trigger">${evolutionDetails['trigger']['name']}</div>
         `;
+        } else {
+            return /*html*/`
+            <div class="trigger"></div>
+        `;
+        }
+        
     }
 
 
@@ -341,7 +348,7 @@ function evolutionChainHTML(base,evolution,evolutionDetails) {
         if (evolutionDetails['item'] != null) {
             return /*html*/`
                 <div class="item">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${evolutionDetails['item']['name']}.png" alt="${evolutionDetails['item']['name']}">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${evolutionDetails['item']['name']}.png" alt="${evolutionDetails['item']['name']}" onerror="this.src='./img/not-found.svg'">
                     <div>${evolutionDetails['item']['name']}</div>
                 </div> 
             `;
@@ -491,7 +498,7 @@ function evolutionChainHTML(base,evolution,evolutionDetails) {
             return /*html*/`
                 <div class="party-species">
                     <div>Party Pokemon:</div>
-                    <img class="party-species-img" src="${pokemon['image']}" alt="${pokemon['name']}_img" onclick="openDetailView(${pokemon['id']})">
+                    <img class="party-species-img" src="${pokemon['image']}" alt="${pokemon['name']}_img" onclick="openDetailView(${pokemon['id']})" onerror="this.src='./img/not-found.svg'">
                 </div>
             `
         } else {
@@ -575,7 +582,7 @@ function evolutionChainHTML(base,evolution,evolutionDetails) {
             return /*html*/`
                 <div class="trade-species">
                     <div>Trade Pokemon:</div>
-                    <img class="trade-species-img" src="${pokemon['image']}" alt="${pokemon['name']}_img" onclick="openDetailView(${pokemon['id']})">
+                    <img class="trade-species-img" src="${pokemon['image']}" alt="${pokemon['name']}_img" onclick="openDetailView(${pokemon['id']})" onerror="this.src='./img/not-found.svg'">
                 </div>
             `
         } else {
