@@ -23,7 +23,7 @@
  * @param {number} pkmnSpDEF - pokmemon special defense
  * @param {number} pkmnSPEED - pokmemon speed
  * @param {number} pkmnStatTotal - pokmemon total stats
- * @returns 
+ * @returns HTML
  */
 function popupDetailViewHTML(id,prevPokemon,nextPokemon,pkmnTypes,pkmnNumber,pkmnName,pkmnImage,pkmnFlavorText,pkmnSpecies,pkmnHeight,pkmnWeight,pkmnAbilities,pkmnGenderRatio,pkmnEggGroups,pkmnEggCycle,pkmnHP,pkmnATK,pkmnDEF,pkmnSpATK,pkmnSpDEF,pkmnSPEED,pkmnStatTotal) {
     return /*html*/`

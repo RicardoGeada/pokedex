@@ -318,8 +318,13 @@ async function init() {
 
 //#endregion LIST VIEW
 
-
-
+/**
+ * stop Prpagation
+ * @param {event} event 
+ */
+function stopPropagation(event) {
+    event.stopPropagation();
+}
 
 
 
